@@ -1,11 +1,12 @@
 const mysql = require('mysql');
+const creds = require('../mySQL.creds.js');
 
 const connection = mysql.createConnection({
-  host: '54.183.237.155',
-  port: '3306',
-  user: 'user',
-  password: 'reviews',
-  database: 'reviewComp',
+  host: creds.dbHost,
+  port: creds.dbPort,
+  user: creds.dbUser,
+  password: creds.dbPassword,
+  database: creds.dbDatabase,
 });
 
 connection.connect((err) => {
