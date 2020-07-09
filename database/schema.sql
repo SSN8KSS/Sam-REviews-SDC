@@ -1,3 +1,4 @@
+DROP DATABASE reviewComp;
 CREATE DATABASE reviewComp;
 
 USE reviewComp;
