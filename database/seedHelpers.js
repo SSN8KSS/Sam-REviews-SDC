@@ -1,5 +1,6 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable max-len */
+const fs = require('fs');
 const db = require('./index.js');
 
 // REVIEWS
@@ -65,22 +66,6 @@ const generateRating = () => Math.floor(Math.random() * 5) + 1;
 const generateDate = (start) => {
   const end = new Date();
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-};
-
-// QUESTIONS
-
-const generateQuestionBody = () => {
-  const opener = ['Do they have', 'Anyone know if they have', 'By chance, do they have', 'I was wondering... do they have'];
-  const randomOpener = opener[getRandomIndex(opener.length)];
-  const amenity = ['fresh fruit', 'entertainment on site', 'complimentary breakfast', 'any grocery stores nearby', 'any historic landmarks nearby', 'a concierge desk', 'free parking', 'a valet service', 'a onsite gym', 'a business center', 'any good pizza nearby', 'a business center', 'a bar'];
-  const randomAmenity = amenity[getRandomIndex(amenity.length)];
-  return `${randomOpener} ${randomAmenity}?`;
-};
-
-const generateAnswerBody = () => {
-  const answerBody = ['I believe so. I recommend double checking with them.', 'Absolutely!', 'No, but check with front desk to see if anything has changed.', 'You betcha. Have a great stay!'];
-  const randomAnswerBody = answerBody[getRandomIndex(answerBody.length)];
-  return randomAnswerBody;
 };
 
 // HOTELS
@@ -157,53 +142,6 @@ const seedReviews = (callback) => {
   });
 };
 
-const seedQuestions = (callback) => {
-  const sql = 'INSERT INTO questions(user_id, hotel_id, question_date, question_body) VALUES ?';
-  const questionTasks = [];
-  // for each hotel id
-  for (let i = 0; i < numberOfHotels; i++) {
-    // generate random number of reviews needed
-    const questionsPerHotel = generateNumber(40);
-    for (let x = 0; x < questionsPerHotel; x++) {
-      const questionDate = generateDate(new Date(2010, 0, 1));
-      const queryArgs = [generateNumber(numberOfUsers), i, questionDate, generateQuestionBody()];
-      questionTasks.push(queryArgs);
-    }
-  }
-  db.query(sql, [questionTasks], (err) => {
-    if (err) {
-      console.log(`error: ${err.message}`);
-    } else {
-      callback();
-    }
-  });
-};
-
-const seedAnswers = (numberQuestionIds, callback) => {
-  const sql = 'INSERT INTO answers(question_id, answerer_user_id, answer_body, thumbs_up_count, thumbs_down_count) VALUES ?';
-  const answerTasks = [];
-  // for each hotel id
-  for (let i = 0; i < numberQuestionIds; i++) {
-    // generate random number of reviews needed
-    const answersPerQuestion = generateNumber(2);
-    for (let x = 0; x < answersPerQuestion; x++) {
-      // make answerDate an advanced feature -- requires coordination amongst tables
-      // let answerDate = generateDate(new Date(2010, 0, 1));
-      const queryArgs = [i, generateNumber(numberOfUsers), generateAnswerBody(), generateNumber(10), generateNumber(2)];
-      answerTasks.push(queryArgs);
-    }
-  }
-  db.query(sql, [answerTasks], (err) => {
-    if (err) {
-      console.log(`error: ${err.message}`);
-    } else {
-      callback();
-    }
-  });
-};
-
 seedHotels(() => console.log('Seeded hotels'));
 seedUsers(() => console.log('Seeded users'));
 seedReviews(() => console.log('Seeded reviews'));
-seedQuestions(() => console.log('Seeded questions'));
-seedAnswers(50, () => console.log('Seeded answers'));

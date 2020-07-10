@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1593394279171" clover="3.2.0">
-  <project timestamp="1593394279171" name="All files">
+<coverage generated="1594161045788" clover="3.2.0">
+  <project timestamp="1594161045788" name="All files">
     <metrics statements="102" coveredstatements="72" conditionals="38" coveredconditionals="11" methods="52" coveredmethods="32" elements="192" coveredelements="115" complexity="0" loc="102" ncloc="102" packages="1" files="6" classes="6"/>
-    <file name="app.jsx" path="/Users/georgeking/Documents/HRSF 128/reviews/client/components/app.jsx">
+    <file name="app.jsx" path="/Users/samsumsion/Documents/_hackReactor/SDC/reviews/client/components/app.jsx">
       <metrics statements="69" coveredstatements="55" conditionals="24" coveredconditionals="9" methods="34" coveredmethods="26"/>
       <line num="9" count="18" type="stmt"/>
       <line num="10" count="18" type="stmt"/>
@@ -74,7 +74,7 @@
       <line num="302" count="1" type="stmt"/>
       <line num="309" count="0" type="stmt"/>
     </file>
-    <file name="appWrapper.jsx" path="/Users/georgeking/Documents/HRSF 128/reviews/client/components/appWrapper.jsx">
+    <file name="appWrapper.jsx" path="/Users/samsumsion/Documents/_hackReactor/SDC/reviews/client/components/appWrapper.jsx">
       <metrics statements="6" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
       <line num="3" count="1" type="stmt"/>
       <line num="213" count="0" type="stmt"/>
@@ -83,7 +83,7 @@
       <line num="231" count="0" type="stmt"/>
       <line num="237" count="0" type="stmt"/>
     </file>
-    <file name="modal.jsx" path="/Users/georgeking/Documents/HRSF 128/reviews/client/components/modal.jsx">
+    <file name="modal.jsx" path="/Users/samsumsion/Documents/_hackReactor/SDC/reviews/client/components/modal.jsx">
       <metrics statements="20" coveredstatements="13" conditionals="12" coveredconditionals="2" methods="9" coveredmethods="5"/>
       <line num="5" count="2" type="stmt"/>
       <line num="9" count="4" type="stmt"/>
@@ -106,18 +106,18 @@
       <line num="48" count="1" type="stmt"/>
       <line num="52" count="5" type="stmt"/>
     </file>
-    <file name="modalWrapper.jsx" path="/Users/georgeking/Documents/HRSF 128/reviews/client/components/modalWrapper.jsx">
+    <file name="modalWrapper.jsx" path="/Users/samsumsion/Documents/_hackReactor/SDC/reviews/client/components/modalWrapper.jsx">
       <metrics statements="4" coveredstatements="1" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <line num="3" count="2" type="stmt"/>
       <line num="17" count="0" type="cond" truecount="0" falsecount="2"/>
       <line num="19" count="0" type="stmt"/>
       <line num="21" count="0" type="stmt"/>
     </file>
-    <file name="review.jsx" path="/Users/georgeking/Documents/HRSF 128/reviews/client/components/review.jsx">
+    <file name="review.jsx" path="/Users/samsumsion/Documents/_hackReactor/SDC/reviews/client/components/review.jsx">
       <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
       <line num="6" count="1" type="stmt"/>
     </file>
-    <file name="reviewWrapper.jsx" path="/Users/georgeking/Documents/HRSF 128/reviews/client/components/reviewWrapper.jsx">
+    <file name="reviewWrapper.jsx" path="/Users/samsumsion/Documents/_hackReactor/SDC/reviews/client/components/reviewWrapper.jsx">
       <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
       <line num="3" count="2" type="stmt"/>
       <line num="19" count="0" type="stmt"/>

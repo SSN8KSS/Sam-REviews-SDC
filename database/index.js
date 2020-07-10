@@ -3,7 +3,6 @@ const creds = require('../mySQL.creds.js');
 
 const connection = mysql.createConnection({
   host: creds.dbHost,
-  port: creds.dbPort,
   user: creds.dbUser,
   password: creds.dbPassword,
   database: creds.dbDatabase,
