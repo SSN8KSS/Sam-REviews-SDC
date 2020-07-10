@@ -1,2 +1,3 @@
 node_modules
 mySQL.creds.js
+./databases/cql.csv

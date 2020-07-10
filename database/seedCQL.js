@@ -1,9 +1,7 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable max-len */
 const fs = require('fs');
-const db = require('./index.js');
-
-// REVIEWS
+// const db = require('./index.js');
 
 const getRandomIndex = (optionArrayLength) => Math.floor(Math.random() * Math.floor(optionArrayLength));
 
@@ -68,8 +66,6 @@ const generateDate = (start) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
-// HOTELS
-
 const generateHotelName = () => {
   const first = ['The', 'International', 'Regional', 'Intercontinental', 'Best', 'Oriental', 'Western', 'Northern', 'Luxury', 'Economy'];
   const randomFirst = first[getRandomIndex(first.length)];
@@ -80,68 +76,28 @@ const generateHotelName = () => {
   return `${randomFirst} ${randomMiddle} ${randomLast}`;
 };
 
-const numberOfHotels = 100;
+const writeHotels = fs.createWriteStream('cql.csv');
 
-const seedHotels = (callback) => {
-  const sql = 'INSERT INTO hotels(hotel_name, hotel_city) VALUES ?';
-  const hotelTasks = [];
-  for (let i = 0; i < numberOfHotels; i++) {
-    const queryArgs = [generateHotelName(), generateCity()];
-    hotelTasks.push(queryArgs);
-  }
-  console.log(hotelTasks);
-  console.log(hotelTasks.length);
-  db.query(sql, [hotelTasks], (err) => {
-    if (err) {
-      console.log(`error: ${err}`);
-    } else {
-      callback();
-    }
-  });
-};
-
-const numberOfUsers = 2000;
-
-const seedUsers = (callback) => {
-  const sql = 'INSERT INTO users(username, user_avatar, user_city, user_contributions, user_helpful_votes) VALUES ?';
-  const userTasks = [];
-  for (let i = 0; i < numberOfUsers; i++) {
-    const queryArgs = [generateUserName(), generateUserAvatar(), generateCity(), generateNumber(30), generateNumber(30)];
-    userTasks.push(queryArgs);
-  }
-  console.log(userTasks);
-  console.log(userTasks.length);
-  db.query(sql, [userTasks], (err) => {
-    if (err) {
-      console.log(`error: ${err.message}`);
-    } else {
-      callback();
-    }
-  });
-};
-
-const seedReviews = (callback) => {
-  const sql = 'INSERT INTO reviews(user_id, hotel_id, review_date, review_body, date_of_stay, room_tip, trip_type, overall_rating, value_rating, location_rating, service_rating, rooms_rating, cleanliness_rating, sleep_quality_rating, collected_in_part_hotel, review_helpful_votes) VALUES ?';
-  const reviewTasks = [];
-  for (let i = 0; i < numberOfHotels; i++) {
-    // generate random number of reviews needed
+const write10millionReviews = (writer, callback) => {
+  let count = 0;
+  while (count < 10000000) {
     const reviewsPerHotel = generateNumber(100);
+    const name = generateHotelName();
     for (let x = 0; x < reviewsPerHotel; x++) {
+      if (count % 100000 === 0) {
+        console.log(count);
+      }
+      count++;
       const dateOfStay = generateDate(new Date(2010, 0, 1));
-      const reviewDate = generateDate(dateOfStay);
-      const queryArgs = [generateNumber(numberOfUsers), i, reviewDate, generateReviewBody(), dateOfStay, generateRoomTip(), generateTripType(), generateRating(), generateRating(), generateRating(), generateRating(), generateRating(), generateRating(), generateRating(), generateNumber(1), generateNumber(30)];
-      reviewTasks.push(queryArgs);
+      const reviewDate = generateDate(dateOfStay).toISOString().split('T')[0];
+      const queryStr = `${name},${reviewDate},${generateRating()},${generateCity()},${count},${generateRating()},${generateRating()},${generateReviewBody()},${generateNumber(30)},${generateRoomTip()},${generateRating()},${generateRating()},${generateRating()},${generateTripType()},${generateUserAvatar()},${generateCity()},${generateUserName()},${generateRating()}\n`;
+      if (count === 10000000) {
+        writer.write(queryStr, 'utf-8', callback);
+      } else {
+        writer.write(queryStr, 'utf-8');
+      }
     }
   }
-  db.query(sql, [reviewTasks], (err) => {
-    if (err) {
-      console.log(`error: ${err.message}`);
-    } else {
-      callback();
-    }
-  });
 };
 
-seedHotels(() => console.log('Seeded hotels'));
-seedUsers(() => console.log('Seeded users'));
-seedReviews(() => console.log('Seeded reviews'));
+write10millionReviews(writeHotels, () => { writeHotels.end(); });
