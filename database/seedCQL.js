@@ -76,28 +76,35 @@ const generateHotelName = () => {
   return `${randomFirst} ${randomMiddle} ${randomLast}`;
 };
 
-const writeHotels = fs.createWriteStream('cql4.csv');
+const writeHotels = fs.createWriteStream('../../csv/cql3.csv');
 
-const write10millionReviews = (writer, start, callback) => {
+const write10millionReviews = (writer, callback) => {
   let count = 0;
+  let hotelInd = 100003;
+  let hotelName = generateHotelName();
   let ok = true;
   const write = () => {
     ok = true;
-    while (ok && count < 20000000) {
-      if (count % 1000000 === 0) {
+    while (ok && count < 10000000) {
+      if (count % 200 === 0) {
+        hotelInd++;
+        hotelName = generateHotelName();
+      }
+      if (count % 100000 === 0) {
         console.log(count);
       }
       count++;
       const dateOfStay = generateDate(new Date(2010, 0, 1));
       const reviewDate = generateDate(dateOfStay).toISOString().split('T')[0];
-      const queryStr = `${generateHotelName()},${reviewDate},${generateRating()},${generateCity()},${count},${generateRating()},${generateRating()},${generateReviewBody()},${generateNumber(30)},${generateRoomTip()},${generateRating()},${generateRating()},${generateRating()},${generateTripType()},${generateUserAvatar()},${generateCity()},${generateUserName()},${generateRating()}\n`;
-      if (count === 20000000) {
+      const queryStr = `${hotelInd},${reviewDate},${generateRating()},${generateCity()},${hotelName},${generateRating()},${generateRating()},${generateReviewBody()},${generateNumber(30)},${generateRoomTip()},${generateRating()},${generateRating()},${generateRating()},${generateTripType()},${generateUserAvatar()},${generateCity()},${generateUserName()},${generateRating()}\n`;
+      if (count === 10000000) {
+        console.log(hotelInd, count);
         writer.write(queryStr, 'utf-8', callback);
       } else {
         ok = writer.write(queryStr, 'utf-8');
       }
     }
-    if (count < 20000000) {
+    if (count < 10000000) {
       writer.once('drain', write);
     }
   };

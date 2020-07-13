@@ -34,27 +34,6 @@ const generateTripType = () => {
   return randomTripType;
 };
 
-const generateUserName = () => {
-  const firstName = ['Dave', 'Eric', 'Rob', 'Craig', 'Greg', 'Adam', 'John', 'Raj', 'Taylor', 'Alex', 'Angela', 'Kathy', 'Destiny', 'Jennifer', 'Ashley', 'Jess'];
-  const randomFirstName = firstName[getRandomIndex(firstName.length)];
-  const lastInitial = ['J', 'D', 'W', 'S', 'K', 'C', 'H', 'A', 'B'];
-  const randomLastInitial = lastInitial[getRandomIndex(lastInitial.length)];
-  return `${randomFirstName} ${randomLastInitial}`;
-};
-
-const generateCity = () => {
-  // cities only at first; could expand to states
-  const city = ['Los Angeles', 'San Francisco', 'Dallas', 'Houston', 'Fort Worth', 'Louisville', 'New Orleans', 'San Diego', 'Chicago', 'St. Louis', 'Denver', 'Boise', 'Indianapolis', 'Jacksonville', 'Tampa', 'Miami', 'New York City', 'Nashville', 'Huntsville', 'Oklahoma City', 'Phoenix'];
-  const randomCity = city[getRandomIndex(city.length)];
-  return randomCity;
-};
-
-const generateUserAvatar = () => {
-  const avatarUrls = ['https://image.freepik.com/free-photo/beautiful-view-sunset-sea_23-2148019892.jpg', 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQVscczKCwBsAg0aMMcI5NjX1meu8_HDZ3d2jhQonix1DCY5n1E&usqp=CAU', 'https://cache.desktopnexus.com/thumbseg/1584/1584748-bigthumbnail.jpg', 'https://images.pexels.com/photos/1461974/pexels-photo-1461974.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSUQobLPiOw-RstxSgFJdTdA5eB0xzHi8p8cbkZfG7u9Ne3xTqz&usqp=CAU'];
-  const randomUrl = avatarUrls[getRandomIndex(avatarUrls.length)];
-  return randomUrl;
-};
-
 // for user contributions, user helpful votes
 const generateNumber = (num) => getRandomIndex(num + 1);
 
@@ -66,38 +45,44 @@ const generateDate = (start) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
-const generateHotelName = () => {
-  const first = ['The', 'International', 'Regional', 'Intercontinental', 'Best', 'Oriental', 'Western', 'Northern', 'Luxury', 'Economy'];
-  const randomFirst = first[getRandomIndex(first.length)];
-  const middle = ['Holiday', 'Fairmont', 'Embassy', 'Travelers', 'Midtown', 'Uptown', 'Ambassadors', 'Nomad'];
-  const randomMiddle = middle[getRandomIndex(middle.length)];
-  const last = ['Resort', 'Suites', 'Hotel', 'Lodges', 'Club', 'Inn', 'Oriental', 'Lodge', 'Moon', 'Horizons', 'Quarters'];
-  const randomLast = last[getRandomIndex(last.length)];
-  return `${randomFirst} ${randomMiddle} ${randomLast}`;
-};
+const writeReviews = fs.createWriteStream('../../csv/sqlReviews3.csv');
 
-const writeHotels = fs.createWriteStream('cql.csv');
-
-const write10millionReviews = (writer, callback) => {
+const writeReviewsTable = (writer, callback) => {
   let count = 0;
-  while (count < 10000000) {
-    const reviewsPerHotel = generateNumber(100);
-    const name = generateHotelName();
-    for (let x = 0; x < reviewsPerHotel; x++) {
+  let hotelInd = 100003;
+  let ok = true;
+  const write = () => {
+    ok = true;
+    while (ok && count < 10000000) {
+      if (count % 200 === 0) {
+        hotelInd++;
+      }
       if (count % 100000 === 0) {
         console.log(count);
       }
       count++;
       const dateOfStay = generateDate(new Date(2010, 0, 1));
       const reviewDate = generateDate(dateOfStay).toISOString().split('T')[0];
-      const queryStr = `${name},${reviewDate},${generateRating()},${generateCity()},${count},${generateRating()},${generateRating()},${generateReviewBody()},${generateNumber(30)},${generateRoomTip()},${generateRating()},${generateRating()},${generateRating()},${generateTripType()},${generateUserAvatar()},${generateCity()},${generateUserName()},${generateRating()}\n`;
+
+      const queryStr = `${generateNumber(2000000) + 1},${hotelInd},${reviewDate},${generateReviewBody()},${reviewDate},${generateRoomTip()},${generateTripType()},${generateRating()},${generateRating()},${generateRating()},${generateRating()},${generateRating()},${generateRating()},${generateRating()},${generateNumber(5)},${generateNumber(10)}\n`;
       if (count === 10000000) {
+        console.log(hotelInd, count);
         writer.write(queryStr, 'utf-8', callback);
       } else {
-        writer.write(queryStr, 'utf-8');
+        ok = writer.write(queryStr, 'utf-8');
       }
     }
-  }
+    if (count < 10000000) {
+      writer.once('drain', write);
+    }
+  };
+  write();
 };
 
-write10millionReviews(writeHotels, () => { writeHotels.end(); });
+writeReviewsTable(writeReviews, () => {
+  writeReviews.end();
+});
+
+// \copy reviews(user_id, hotel_id, review_date, review_body, date_of_stay, room_tip, trip_type, overall_rating, value_rating, location_rating, service_rating, rooms_rating, cleanliness_rating, sleep_quality_rating, collected_in_part_hotel, review_helpful_votes) from '/Users/samsumsion/Documents/_hackReactor/SDC/csv/sqlReviews.csv' delimiter ',' csv;
+
+// \copy users(username, user_avatar, user_city, user_contributions, user_helpful_votes) from '/Users/samsumsion/Documents/_hackReactor/SDC/csv/sqlUsers.csv' delimiter ',' csv;
