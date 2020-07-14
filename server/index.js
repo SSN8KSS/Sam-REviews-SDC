@@ -1,23 +1,18 @@
 const express = require('express');
+const db = require('../database/index.js');
 
 const app = express();
 const port = 3004;
-const models = require('./models.js');
+// const models = require('./models.js');
 
 app.use('/reviews', express.static('public'));
 
 app.get('/reviews/:hotelId', (req, res) => {
-  // to do: filter hotelId to validate input
-  const hotelId = req.params.hotelId || 1;
-  models.getReviewData((results) => {
-    res.status(200).send(JSON.stringify(results));
-  }, hotelId);
-});
-
-app.get('/questions', (req, res) => {
-  models.getQuestionData((resultsPacket) => {
-    res.status(200).send(JSON.stringify(resultsPacket));
-  });
+  const hotelId = req.params.hotelId || 2;
+  const query = 'SELECT * FROM reviews.byhotel WHERE id = ?;';
+  db.execute(query, [hotelId], { prepare: true })
+    .then(results => res.status(200).send(JSON.stringify(results.rows)))
+    .catch(err => { console.log(err); });
 });
 
 app.listen(port, () => console.log(`Reviews app listening at ${port}`));

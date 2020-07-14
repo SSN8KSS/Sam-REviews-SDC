@@ -86,3 +86,10 @@ writeReviewsTable(writeReviews, () => {
 // \copy reviews(user_id, hotel_id, review_date, review_body, date_of_stay, room_tip, trip_type, overall_rating, value_rating, location_rating, service_rating, rooms_rating, cleanliness_rating, sleep_quality_rating, collected_in_part_hotel, review_helpful_votes) from '/Users/samsumsion/Documents/_hackReactor/SDC/csv/sqlReviews.csv' delimiter ',' csv;
 
 // \copy users(username, user_avatar, user_city, user_contributions, user_helpful_votes) from '/Users/samsumsion/Documents/_hackReactor/SDC/csv/sqlUsers.csv' delimiter ',' csv;
+
+// SELECT * FROM reviews
+// INNER JOIN hotels
+// ON reviews.hotel_id=hotels.id
+// INNER JOIN users
+// ON reviews.user_id=users.id
+// WHERE reviews.hotel_id = 1;
