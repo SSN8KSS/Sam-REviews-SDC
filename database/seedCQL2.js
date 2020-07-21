@@ -76,11 +76,11 @@ const generateHotelName = () => {
   return `${randomFirst} ${randomMiddle} ${randomLast}`;
 };
 
-const writeHotels = fs.createWriteStream('cql.csv');
+const writeHotels = fs.createWriteStream('cql2.csv');
 
 const write10millionReviews = (writer, callback) => {
   let count = 0;
-  let hotelInd = 1;
+  let hotelInd = 50002;
   let hotelName = generateHotelName();
   let ok = true;
   const write = () => {
