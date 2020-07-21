@@ -1,7 +1,7 @@
 DROP DATABASE reviewComp;
 CREATE DATABASE reviewComp;
 
-USE reviewComp;
+\c reviewcomp;
 
 CREATE TABLE hotels (
   id SERIAL NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE hotels (
 CREATE TABLE users (
   id SERIAL NOT NULL,
   username varchar(50) NOT NULL,
-  user_avatar varchar(2083),
+  user_avatar varchar(255),
   user_city varchar(255) NOT NULL,
   user_contributions int DEFAULT 0,
   user_helpful_votes int DEFAULT 0,
@@ -22,8 +22,8 @@ CREATE TABLE users (
 
 CREATE TABLE reviews (
   id SERIAL NOT NULL,
-  user_id int NOT NULL,
-  hotel_id int NOT NULL,
+  user_id int NOT NULL REFERENCES users(id),
+  hotel_id int NOT NULL REFERENCES hotels(id),
   review_date TIMESTAMP NOT NULL,
   review_body text NOT NULL,
   date_of_stay DATE NOT NULL,
